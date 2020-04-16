@@ -91,17 +91,18 @@ def calculoVarianzaPorTirada(tiradas):                      #Calcula la varianza
     for tirada in tiradas:
         tiradaTemp.append(tirada)
         varianzaPorTirada.append(np.var(tiradaTemp))
-    #print(esperanzaPorTirada)
+    print(varianzaPorTirada)
     return varianzaPorTirada
 
-def creoGraficoVarianzaEsperanza(lista):
-    plt.title('Varianza Matematica de la Esperanza Matematica')
-    plt.plot(lista)
+def graficarVarianza():
+    listaVarianzaPorTirada = calculoVarianzaPorTirada(tiradas)
+    plt.title('Varianza Matematica')
+    plt.plot(listaVarianzaPorTirada)
     plt.xlabel("Tiradas")
     plt.ylabel("Valor")
-    plt.ylim(0,36)
-    plt.xlim(0, cantTiradas)
-    plt.axhline(color='k', ls="dotted", xmax=cantTiradas)  # ls es el tipo de linea
+    plt.ylim(0,max)
+    plt.xlim(0, cantidadTiradas)
+    plt.axhline(color='k', ls="dotted", xmax=cantidadTiradas)  # ls es el tipo de linea
     plt.show()
     
 CrearRuleta()
