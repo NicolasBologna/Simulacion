@@ -58,3 +58,4 @@ docs/_build/
 target/
 
 tp1 carpeta hernan\.py
+.venv/*

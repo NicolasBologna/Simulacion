@@ -6,7 +6,7 @@ from tabulate import tabulate
 
 min = 0
 max = 37
-cantidadTiradas = 2500
+cantidadTiradas = 250
 ruleta = [] 
 
 def CrearRuleta():
@@ -91,18 +91,22 @@ def calculoVarianzaPorTirada(tiradas):                      #Calcula la varianza
     for tirada in tiradas:
         tiradaTemp.append(tirada)
         varianzaPorTirada.append(np.var(tiradaTemp))
-    print(varianzaPorTirada)
     return varianzaPorTirada
 
-def graficarVarianza():
-    listaVarianzaPorTirada = calculoVarianzaPorTirada(tiradas)
+def graficarVarianza(cantidadCorridas):
+    tiradas = RealizarTiradas(cantidadTiradas)
+    varianzaTeorica = np.var(tiradas)
+    for i in range(0,cantidadCorridas):
+        tiradas = RealizarTiradas(cantidadTiradas)
+        listaVarianzaPorTirada = calculoVarianzaPorTirada(tiradas)
+        plt.plot(listaVarianzaPorTirada, label = "line "+ str(i))
+    
     plt.title('Varianza Matematica')
-    plt.plot(listaVarianzaPorTirada)
     plt.xlabel("Tiradas")
     plt.ylabel("Valor")
-    plt.ylim(0,max)
+    plt.ylim(0,varianzaTeorica*2)
     plt.xlim(0, cantidadTiradas)
-    plt.axhline(color='k', ls="dotted", xmax=cantidadTiradas)  # ls es el tipo de linea
+    plt.axhline(np.v5ar(tiradas),color='k', ls="dotted", xmax=cantidadTiradas)  # ls es el tipo de linea
     plt.show()
     
 CrearRuleta()
@@ -111,8 +115,9 @@ tiradas = RealizarTiradas(cantidadTiradas)
 #print(CalcularFrecuenciasRelativasPorTirada(tiradas,2))
 
 
-
-#graficarFrecuenciasRelativas()
-#graficarEsperanza()
-graficarVarianza()
+for i in range(1,6,4):
+    #graficarFrecuenciasRelativas(i)
+    #graficarEsperanza(i)
+    print(i)
+    graficarVarianza(i)
 
