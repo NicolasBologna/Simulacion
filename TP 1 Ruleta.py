@@ -6,7 +6,7 @@ from tabulate import tabulate
 
 min = 0
 max = 37
-cantidadTiradas = 250
+cantidadTiradas =  250
 ruleta = [] 
 
 def CrearRuleta():
@@ -74,15 +74,21 @@ def CalcularEsperanzaPorTirada(tiradas):
     #print(esperanzaPorTirada)
     return esperanzaPorTirada
 
-def graficarEsperanza():
-    listaEsperanzaPorTirada = CalcularEsperanzaPorTirada(tiradas)
+def graficarEsperanza(cantidadCorridas):
+    #listaEsperanzaPorTirada = CalcularEsperanzaPorTirada(tiradas)
+    tiradas = RealizarTiradas(cantidadTiradas)
+    esperanzaTeorica = np.median(tiradas)
+    for i in range(0,cantidadCorridas):
+        tiradas = RealizarTiradas(cantidadTiradas)
+        listaEsperanzaPorTirada = CalcularEsperanzaPorTirada(tiradas)
+        plt.plot(listaEsperanzaPorTirada, label = "line "+ str(i))
     plt.title('Esperanza matemática')
-    plt.plot(listaEsperanzaPorTirada)
+    #plt.plot(listaEsperanzaPorTirada)
     plt.xlabel("Tiradas")
     plt.ylabel("Valor")
     plt.ylim(0,max)
     plt.xlim(0,cantidadTiradas)
-    plt.axhline(max/2,color='k', ls="dotted", xmax=cantidadTiradas)
+    plt.axhline(esperanzaTeorica,color='k', ls="dotted", xmax=cantidadTiradas)
     plt.show()
 
 def calculoVarianzaPorTirada(tiradas):                      #Calcula la varianza de los datos
@@ -106,7 +112,32 @@ def graficarVarianza(cantidadCorridas):
     plt.ylabel("Valor")
     plt.ylim(0,varianzaTeorica*2)
     plt.xlim(0, cantidadTiradas)
-    plt.axhline(np.v5ar(tiradas),color='k', ls="dotted", xmax=cantidadTiradas)  # ls es el tipo de linea
+    plt.axhline(np.var(tiradas),color='k', ls="dotted", xmax=cantidadTiradas)  # ls es el tipo de linea
+    plt.show()
+
+
+def calculoDesvioPorTirada(tiradas):                      #Calcula la varianza de los datos
+    desvioPorTirada = []
+    tiradaTemp = []
+    for tirada in tiradas:
+        tiradaTemp.append(tirada)
+        desvioPorTirada.append(np.std(tiradaTemp))
+    return desvioPorTirada
+
+def graficarDesvio(cantidadCorridas):
+    tiradas = RealizarTiradas(cantidadTiradas)
+    desvioTeorico = np.std(tiradas)
+    for i in range(0,cantidadCorridas):
+        tiradas = RealizarTiradas(cantidadTiradas)
+        listaDesvioPorTirada = calculoDesvioPorTirada(tiradas)
+        plt.plot(listaDesvioPorTirada, label = "line "+ str(i))
+    
+    plt.title('Varianza Matematica')
+    plt.xlabel("Tiradas")
+    plt.ylabel("Valor")
+    plt.ylim(0,desvioTeorico*2)
+    plt.xlim(0, cantidadTiradas)
+    plt.axhline(np.std(tiradas),color='k', ls="dotted", xmax=cantidadTiradas)  # ls es el tipo de linea
     plt.show()
     
 CrearRuleta()
@@ -116,8 +147,7 @@ tiradas = RealizarTiradas(cantidadTiradas)
 
 
 for i in range(1,6,4):
-    #graficarFrecuenciasRelativas(i)
+    #graficarFrecuenciasRelativas()
     #graficarEsperanza(i)
-    print(i)
-    graficarVarianza(i)
-
+    #graficarVarianza(i)
+    graficarDesvio(i)
