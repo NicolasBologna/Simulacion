@@ -20,3 +20,4 @@ def RealizarTiradas(cantidadTiradas):
     for i in range(0,cantidadTiradas):
         tiradas.append(GirarRuleta())
     return tiradas
+    
