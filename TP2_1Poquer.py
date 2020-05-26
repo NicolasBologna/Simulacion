@@ -1,6 +1,7 @@
+import scipy.stats as st
 
-
-def NumerosIgualesPornumero(listaaleatoria, todos):
+def NumerosIgualesPornumero(listaaleatoria):
+    todos = []
     for t in (listaaleatoria):
         c1=''
         lista = [0] * 10
@@ -89,3 +90,8 @@ def Poker(todos,m):
         print('Se acepta la hipotesis, son numeros aleatorios')
     else:
         print('No se acepta la hipotesis')
+
+if __name__ == "__main__":
+    lista = []
+    listaJugadas = NumerosIgualesPornumero(lista)
+    Poker(listaJugadas,len(listaJugadas))

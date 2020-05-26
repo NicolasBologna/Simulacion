@@ -3,12 +3,12 @@ from scipy import stats
 import numpy as np
 import TP2_1NumerosAleatorios as generadores
 
-#k > 5 cantidad de subintervalos
+#k > 100!! cantidad de subintervalos
 #n/k > 5 n = cantidad de numeros
 
 mod = 512 #poner el valor maximo + 1
 n = 450
-k = 10
+k = 100
 salto = 1/k
 
 generadosGCL = np.array(generadores.GCL(mod,347887,n,557,33453))/(mod-1)

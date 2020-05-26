@@ -10,18 +10,18 @@ rate=0
 resultado=False
 exit=False
 min = 0
-max = 36
+maximo = 36
 cantidadTiradas =  80
 cantidadJuegos = 5
 ruleta = [] 
 capital = 1000
 
 def CrearRuleta():
-    ruleta.extend(range(min,max))
+    ruleta.extend(range(min,maximo))
     print("La ruleta es la siguiente:", ruleta)
 
 def GirarRuleta():
-    return ran.randint(min,max)
+    return ran.randint(min,maximo)
 
 def RealizarTiradas(cantidadTiradas):
     tiradas = []
@@ -132,6 +132,19 @@ def Dalembert(capital):
     plt.ylabel("Cantidad de capital en pesos")
     plt.axhline(capital, color='k',ls="dotted", xmax=indice)
     plt.ylim(600,(capital*2)-600)
+    plt.xlim(0,indice)   
+    plt.show()
+
+    #Grafica fluctuacion de capital vs fr
+    plt.title('Porcentaje de capital con \n respecto a la freceuncia \n en cada tirada')
+    plt.plot(range(0,indice),frecuenciasRelativas)
+    historioCapital = np.asarray(historioCapital)/max(historioCapital)
+
+    plt.plot(range(0,indice),historioCapital)
+    plt.xlabel("Tiradas")
+    plt.ylabel("Cantidad de capital en pesos")
+    plt.axhline(capital, color='k',ls="dotted", xmax=indice)
+    plt.ylim(-0.5,1.5)
     plt.xlim(0,indice)   
     plt.show()
 

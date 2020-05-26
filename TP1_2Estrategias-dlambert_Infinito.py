@@ -9,19 +9,19 @@ choice=0
 rate=0
 resultado=False
 exit=False
-min = 0
-max = 36
-cantidadTiradas =  8000
+minimo = 0
+maximo = 36
+cantidadTiradas =  1500
 cantidadJuegos = 5
 ruleta = [] 
 capital = 1000
 
 def CrearRuleta():
-    ruleta.extend(range(min,max))
+    ruleta.extend(range(minimo,maximo))
     print("La ruleta es la siguiente:", ruleta)
 
 def GirarRuleta():
-    return ran.randint(min,max)
+    return ran.randint(minimo,maximo)
 
 def RealizarTiradas(cantidadTiradas):
     tiradas = []
@@ -105,6 +105,26 @@ def Dalembert(capital):
     plt.ylabel("Cantidad de capital en pesos")
     plt.axhline(capital, color='k',ls="dotted", xmax=indice)
     plt.ylim(min_yaxis,max_yaxis)
+    plt.xlim(0,indice)   
+    plt.show()
+
+    #Grafica fluctuacion de capital vs fr
+    plt.title('Porcentaje de capital con \n respecto a la freceuncia \n en cada tirada')
+    line1, = plt.plot(range(0,indice),frecuenciasRelativas, label="Frecuencias")
+    historioCapital = np.asarray(historioCapital)/max(historioCapital)
+
+    line2, = plt.plot(range(0,indice),historioCapital, label="Capital")
+
+    first_legend = plt.legend(handles=[line1], loc='upper right')
+
+    # Add the legend manually to the current Axes.
+    ax = plt.gca().add_artist(first_legend)
+
+    # Create another legend for the second line.
+    plt.legend(handles=[line2], loc='lower right')
+    plt.xlabel("Tiradas")
+    plt.axhline(capital, color='k',ls="dotted", xmax=indice)
+    plt.ylim(min(historioCapital),1.5)
     plt.xlim(0,indice)   
     plt.show()
 
