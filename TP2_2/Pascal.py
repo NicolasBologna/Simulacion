@@ -7,7 +7,7 @@ import NumerosGenerados as ng
 
 
 # Graficando Binomial negativa
-n, p = 20 , 0.2 # parametros de forma 
+n, p = 1 , 0.2 # parametros de forma 
 nbinomial = sp.nbinom(n=n, p=p) # Distribución
 x = np.arange(nbinomial.ppf(0.01),
               nbinomial.ppf(0.99))

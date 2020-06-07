@@ -4,37 +4,50 @@ import scipy.stats as sp
 import math
 import random as rm
 import NumerosGenerados as ng
+import scipy.interpolate as si
 
 
 # Graficando Binomial
 n, p = 30, 0.4
-x = np.arange(sp.binom.ppf(0.01, n, p),
+xLine = np.arange(sp.binom.ppf(0.01, n, p),
               sp.binom.ppf(0.99, n, p))
-fmp = sp.binom.pmf(x, n, p) # Función de Masa de Probabilidad
-plt.plot(x, fmp, '--')
-plt.vlines(x, 0, fmp, colors='b', lw=5, alpha=0.5)
+fmp = sp.binom.pmf(xLine, n, p) 
+plt.plot(xLine, fmp, '--')
+plt.vlines(xLine, 0, fmp, colors='b', lw=5, alpha=0.5)
 plt.title('Distribución Binomial')
 plt.ylabel('probabilidad')
 plt.xlabel('valores')
 plt.show()
 
 #----------Naylor----------
-randomGCL = ng.generarNumeros(n)
+cant = 10000
+randomGCL = ng.generarNumeros(cant)
 
-def funBinomial(n, p):
+def funBinomial (n, p):
     binomiales= []
-    for i in range (n):
+    for i in range (cant):
         x= 0
         for j in range (n):
-            r=rm.choice(randomGCL)
+            r=rm.uniform(0,1)
             if ((r-p)<=0):
                 x = x + 1
         binomiales.append(x)
+    unicos, cuenta = np.unique(binomiales, return_counts=True)
+    frec = np.array(cuenta/cant)
     print("Media: ", np.mean(binomiales))
     print("Desvio: ", np.sqrt(np.var(binomiales)))
     print("Varianza: ", np.var(binomiales))
     plt.title("Distribucion Binomial")
-    plt.hist(binomiales, density=True , bins=15, edgecolor="black")
+
+    xnew = np.linspace(unicos.min(), unicos.max(), 300)  
+    spl = si.make_interp_spline(unicos, frec, k=3)
+    frec_suavizada = spl(xnew)
+
+    plt.plot(xLine, fmp, '--')
+    plt.vlines(xLine, 0, fmp, colors='black', lw=5, alpha=0.5)
+
+    plt.plot(xnew, frec_suavizada, '--')
+    plt.bar(unicos, frec, width=0.2, alpha = 0.7)
     plt.show()
 
 funBinomial(n,p)
