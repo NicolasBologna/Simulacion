@@ -30,6 +30,7 @@ def hiper(N, n, p):
         x = 0
         Nn= N
         Pp = p
+        j=0
         for j in range (n):
             r = rm.choice(randomGCL)
             if ((r-Pp)<=0):
@@ -37,8 +38,10 @@ def hiper(N, n, p):
                 x = x +1
             else:
                 s = 0
+            print(Nn)
             Pp = (Nn * Pp - s)/(Nn - 1)
             Nn = Nn - 1
+            if(Nn<2):break
         hipers.append(x)
     unicos, cuenta = np.unique(hipers, return_counts=True)
     frec = np.array(cuenta/cant)
