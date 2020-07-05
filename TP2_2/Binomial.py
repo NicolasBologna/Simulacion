@@ -5,6 +5,7 @@ import math
 import random as rm
 import NumerosGenerados as ng
 import scipy.interpolate as si
+from Testsdiscretos import testBinomial
 
 
 # Graficando Binomial
@@ -18,13 +19,16 @@ plt.title('Distribución Binomial')
 plt.ylabel('probabilidad')
 plt.xlabel('valores')
 plt.show()
+print("Media: ", round(np.mean(xLine),3))
+print("Desvio: ", round(np.sqrt(np.var(xLine)),3))
+print("Varianza: ", round(np.var(xLine),3))
 
 #----------Naylor----------
 cant = 10000
 randomGCL = ng.generarNumeros(cant)
+binomiales= []
 
 def funBinomial (n, p):
-    binomiales= []
     for i in range (cant):
         x= 0
         for j in range (n):
@@ -34,9 +38,9 @@ def funBinomial (n, p):
         binomiales.append(x)
     unicos, cuenta = np.unique(binomiales, return_counts=True)
     frec = np.array(cuenta/cant)
-    print("Media: ", np.mean(binomiales))
-    print("Desvio: ", np.sqrt(np.var(binomiales)))
-    print("Varianza: ", np.var(binomiales))
+    print("Media: ", round(np.mean(binomiales),3))
+    print("Desvio: ", round(np.sqrt(np.var(binomiales)),3))
+    print("Varianza: ", round(np.var(binomiales),3))
     plt.title("Distribucion Binomial")
 
     xnew = np.linspace(unicos.min(), unicos.max(), 300)  
@@ -51,3 +55,7 @@ def funBinomial (n, p):
     plt.show()
 
 funBinomial(n,p)
+
+binomialTeorica = np.random.binomial(n, p, cant)
+
+testBinomial(binomiales,binomialTeorica)

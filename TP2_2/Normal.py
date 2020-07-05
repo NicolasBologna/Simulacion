@@ -4,12 +4,16 @@ import scipy.stats as sp
 import math
 import random as rm
 import NumerosGenerados as ng
+from Tests import testNormal
 
-n = 100000
-inicio = 0
-ancho = 20
-alfa = 200
-numerosNormal = sp.norm.rvs(size=n, loc = inicio, scale=ancho)
+n = 1000000
+esperanza = 0
+desvio = 20
+numerosNormal = sp.norm.rvs(size=n, loc = esperanza, scale=desvio)
+
+print("Media: ", round(np.mean(numerosNormal),3))
+print("Desvio: ", round(np.sqrt(np.var(numerosNormal)),3))
+print("Varianza: ", round(np.var(numerosNormal),3))
 
 plt.hist(numerosNormal, bins=50, color='red', histtype="bar",alpha=0.8,ec="black")
 plt.xlabel("valores")
@@ -17,13 +21,14 @@ plt.ylabel("Frecuencia Absoluta")
 plt.show()
 
 #----------Naylor----------
-randomGCL = ng.generarNumeros(n)
+randomGCL = ng.generarNumeros(n*12)
+
+normales = []
 
 def normal(esperanza, desvio):
-    normales = []
     for i in range (n):
         sumatoria = 0
-        for j in range (1,12):
+        for j in range (12):
             r=rm.choice(randomGCL)
             sumatoria = sumatoria + r
         normales.append((desvio * (sumatoria-6)) + esperanza )
@@ -35,4 +40,6 @@ def normal(esperanza, desvio):
     plt.hist(normales, bins=50,color = 'skyblue', histtype="bar",alpha=0.8,ec="black")
     plt.show()
 
-normal(10,20)
+normal(esperanza,desvio)
+
+testNormal(normales,esperanza,desvio)

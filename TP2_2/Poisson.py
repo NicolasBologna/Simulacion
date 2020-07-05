@@ -5,8 +5,9 @@ import math
 import random as rm
 import NumerosGenerados as ng
 import scipy.interpolate as si
+from Testsdiscretos import testPoisson
 
-mu =  3.6 
+mu =  6.3 
 poisson = sp.poisson(mu) 
 xLine = np.arange(poisson.ppf(0.01),
               poisson.ppf(0.99))
@@ -17,13 +18,16 @@ plt.title('Distribución Poisson')
 plt.ylabel('probabilidad')
 plt.xlabel('valores')
 plt.show()
+print("Media: ", round(np.mean(xLine),3))
+print("Desvio: ", round(np.sqrt(np.var(xLine)),3))
+print("Varianza: ", round(np.var(xLine),3))
 
 #----------Naylor----------
 cant = 10000
 randomGCL = ng.generarNumeros(cant)
+poissons = []
 
-def poisson(lamda):
-    poissons = []
+def funPoisson(lamda):
     for i in range (cant):
         x = 0
         b = np.exp(-lamda)
@@ -37,9 +41,9 @@ def poisson(lamda):
         poissons.append(x)
     unicos, cuenta = np.unique(poissons, return_counts=True)
     frec = np.array(cuenta/cant)
-    print("Media: ", np.mean(poissons))
-    print("Desvio: ", np.sqrt(np.var(poissons)))
-    print("Varianza: ", np.var(poissons))
+    print("Media: ", round(np.mean(poissons),3))
+    print("Desvio: ", round(np.sqrt(np.var(poissons)),3))
+    print("Varianza: ", round(np.var(poissons),3))
     plt.title("Distribucion de Poisson")
     print(unicos,cuenta)
     xnew = np.linspace(unicos.min(), unicos.max(), 300)  
@@ -53,4 +57,8 @@ def poisson(lamda):
     plt.bar(unicos, frec, width=0.2, alpha = 0.7)
     plt.show()
 
-poisson(mu)
+funPoisson(mu)
+
+poissonTeorica = np.random.poisson(mu,cant)
+
+testPoisson(poissons,poissonTeorica)

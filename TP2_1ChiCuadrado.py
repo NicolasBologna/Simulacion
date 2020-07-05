@@ -7,8 +7,8 @@ import TP2_1NumerosAleatorios as generadores
 #n/k > 5 n = cantidad de numeros
 
 mod = 512 #poner el valor maximo + 1
-n = 450
-k = 100
+n = 4500
+k = 101
 salto = 1/k
 
 generadosGCL = np.array(generadores.GCL(mod,347887,n,557,33453))/(mod-1)
@@ -21,7 +21,7 @@ enter = 0
 	else:
 		print(round(elem,5), " & ")
 		enter += 1'''
-confianza = 0.99
+confianza = 0.95
 
 listaFrAbs = np.array([0] * k)
    

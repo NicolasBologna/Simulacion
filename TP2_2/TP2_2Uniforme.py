@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as sp
 import random as rm
 import NumerosGenerados as ng
+from Tests import testUniforme
 
 
 n = 100000
@@ -19,8 +20,8 @@ plt.show()
 #----------Naylor----------
 randomGCL = ng.generarNumeros(n)
 
+uniformes = []
 def uniforme(a,b):
-    uniformes = []
     for r in randomGCL:
         x = a + (b - a) * r
         uniformes.append(x) 
@@ -34,3 +35,6 @@ def uniforme(a,b):
     plt.show()
 
 uniforme(inicio,ancho)
+
+
+testUniforme(uniformes)

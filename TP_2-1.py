@@ -402,7 +402,7 @@ def randomorg_test(cant, min, max):                                   # Test wit
 #alfa es el margen de error
 
 mod = 2**32 #poner el valor maximo + 1
-n = 5000
+n = 200
 k = 101
 salto = 1/k
 alfa = 0.05

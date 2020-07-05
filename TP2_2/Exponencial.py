@@ -4,11 +4,16 @@ import scipy.stats as sp
 import random as rm
 import math
 import NumerosGenerados as ng
+from Tests import testExpo
 
 n = 100000
 inicio = 0
 alfa = 2
 numeros_uniformes = sp.expon.rvs(size=n, loc = inicio, scale=1/alfa)
+
+print("Media: ", round(np.mean(numeros_uniformes),3))
+print("Desvio: ", round(np.sqrt(np.var(numeros_uniformes)),3))
+print("Varianza: ", round(np.var(numeros_uniformes),3))
 
 plt.hist(numeros_uniformes, bins=50, color='skyblue', histtype="bar",alpha=0.8,ec="black")
 plt.xlabel("valores")
@@ -19,9 +24,10 @@ plt.show()
 #----------Naylor----------
 randomGCL = ng.generarNumeros(n)
 
+exponenciales=[]
+
 def exponencial(alfa):
     EX= 1/alfa
-    exponenciales=[]
     for r in randomGCL:
         x= -EX*math.log(r)
         exponenciales.append(x)
@@ -34,3 +40,5 @@ def exponencial(alfa):
     plt.show()
 
 exponencial(alfa)
+
+testExpo(exponenciales)

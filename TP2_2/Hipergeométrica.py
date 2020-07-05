@@ -9,9 +9,10 @@ import scipy.interpolate as si
 
 
 # Graficando Hipergeométrica
-M, n, N = 30, 10, 12 # parametros de forma 
+M, n, N = 50,20 , 35 # parametros de forma 
 hipergeometrica = sp.hypergeom(M, n, N) # Distribución
-xLine = np.arange(0, n+1)
+xLine = np.arange(hipergeometrica.ppf(0.01),
+                    hipergeometrica.ppf(0.99))
 fmp = hipergeometrica.pmf(xLine) # Función de Masa de Probabilidad
 plt.plot(xLine, fmp, '--')
 plt.vlines(xLine, 0, fmp, colors='red', lw=5, alpha=0.5,ec="black")
@@ -19,29 +20,36 @@ plt.title('Distribución Hipergeométrica')
 plt.ylabel('probabilidad')
 plt.xlabel('valores')
 plt.show()
+print(xLine,fmp)
+
+print("Media: ", np.mean(xLine))
+print("Desvio: ", np.sqrt(np.var(xLine)))
+print("Varianza: ", np.var(xLine))
 
 #----------Naylor----------
 cant = 10000
 randomGCL = ng.generarNumeros(cant)
 
-def hiper(N, n, p):
+p=n/M
+#M tamaño pobalcion
+#n tamaño muestra
+#N cantidad de
+
+def hiper(M, N, p):
     hipers = []
     for i in range (cant):
         x = 0
-        Nn= N
+        Mn = M
         Pp = p
-        j=0
-        for j in range (n):
+        for j in range (N):
             r = rm.choice(randomGCL)
             if ((r-Pp)<=0):
                 s = 1
                 x = x +1
             else:
                 s = 0
-            print(Nn)
-            Pp = (Nn * Pp - s)/(Nn - 1)
-            Nn = Nn - 1
-            if(Nn<2):break
+            Pp = (Mn * Pp - s)/(Mn - 1)
+            Mn = Mn - 1
         hipers.append(x)
     unicos, cuenta = np.unique(hipers, return_counts=True)
     frec = np.array(cuenta/cant)
@@ -54,11 +62,11 @@ def hiper(N, n, p):
     spl = si.make_interp_spline(unicos, frec, k=3)
     frec_suavizada = spl(xnew)
 
-    plt.plot(xLine, fmp, '--')
+    plt.plot(xLine, fmp, '--', color = "red")
     plt.vlines(xLine, 0, fmp, colors='black', lw=5, alpha=0.5)
 
     plt.plot(xnew, frec_suavizada, '--')
     plt.bar(unicos, frec, width=0.2, alpha = 0.7)
     plt.show()
 
-hiper(n, M , N)
+hiper(M, N , p)

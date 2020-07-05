@@ -11,6 +11,10 @@ ancho = 20
 K = 3
 numerosGamma = sp.gamma.rvs(size=n, a = K)
 
+print("Media: ", round(np.mean(numerosGamma),3))
+print("Desvio: ", round(np.sqrt(np.var(numerosGamma)),3))
+print("Varianza: ", round(np.var(numerosGamma),3))
+
 plt.hist(numerosGamma, bins=50, color='red', histtype="bar",alpha=0.8,ec="black")
 plt.xlabel("valores")
 plt.ylabel("Frecuencia Absoluta")

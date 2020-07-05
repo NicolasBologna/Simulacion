@@ -7,7 +7,7 @@ from scipy import stats
 
 mod = 64 #poner el valor maximo + 1
 
-n = 450
+n = 4500
 k = 10
 salto = 1/k
 
