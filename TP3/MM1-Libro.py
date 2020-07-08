@@ -14,23 +14,22 @@ NumEvents = 2 #Defimos número de tipos de eventos (usamos 2: arribos y llegadas
 BUSY = 1 
 IDLE = 0
 
-QLIMIT = 2 #Hay que probar cambiando
+QLIMIT = 10**5 #Hay que probar cambiando
 
 def Report():
     global NumCustsDelayed
     AvgDelayInQ = TotalOfDelays/NumCustsDelayed
     AvgNumInQ = AreaNumInQ/Time
-    AvgNumInSys = NumInSys/Time
     ServerUtilization = AreaServerStatus/Time
     '''print("Promedio de espera en la cola: ",round(AvgDelayInQ,3)," minutos.")
     print("Promedio de largo de la cola: ",round(AvgNumInQ,3)," clientes.")
     print("Utilización del servidor: ",round(ServerUtilization,3))
     print("Tiempo de finalización: ",round(Time,3))'''
-    return [AvgNumInQ,AvgDelayInQ, ServerUtilization, AvgNumInSys]
+    return [AvgNumInQ,AvgDelayInQ, ServerUtilization]
 
 
 def Initialize():
-    global MeanInterarrival, Time, TimeNextEvent, ServerStatus, NumCustsDelayed, TotalOfDelays, AreaNumInQ, AreaServerStatus, NextEventType, NumDelaysRequired, NumInQ, MeanService, TimeLastEvent, TimeArrival, NumInSys
+    global MeanInterarrival, Time, TimeNextEvent, ServerStatus, NumCustsDelayed, TotalOfDelays, AreaNumInQ, AreaServerStatus, NextEventType, NumDelaysRequired, NumInQ, MeanService, TimeLastEvent, TimeArrival
     Time = 0
 
     ServerStatus = IDLE
@@ -40,7 +39,6 @@ def Initialize():
     NumCustsDelayed = 0
     NumInQ = 0 #número de clientes en cola
     ServerStatus = 0
-    NumInSys = 0 #nùmero de clientes en el sistema
 
     #variables reales
     AreaNumInQ = 0 #área debajo de la función número de clientes en cola
@@ -50,8 +48,9 @@ def Initialize():
     TotalOfDelays = 0 #número de clientes que completaron sus demoras
 
     #arrays
-    TimeArrival = np.zeros([NumDelaysRequired+1])
+    TimeArrival = np.zeros([QLIMIT+1])
     TimeNextEvent = np.zeros([NumEvents+1]) #arreglo que contiene el tiempo del próximo evento I en la posición TimeNextEvent[I]
+
 
     TimeNextEvent[1] = Time + funExpon(1/MeanInterarrival)
     TimeNextEvent[2] = 10**30
@@ -74,12 +73,13 @@ def Timing():
         sys.exit()
         
 def Arrive():
-    global ServerStatus,TimeArrival, TotalOfDelays, NumCustsDelayed, TimeNextEvent, NumInQ, MeanService, NumInSys 
+    global ServerStatus,TimeArrival, TotalOfDelays, NumCustsDelayed, TimeNextEvent, NumInQ, MeanService
     TimeNextEvent[1] = Time + funExpon(1/MeanInterarrival)
-    NumInSys += 1
     #print("arribo")
     if ServerStatus == BUSY:    
         NumInQ += 1   
+        if NumInQ > QLIMIT:
+            print("se excedió la cantidad máxima de usuarios en cola en el momento: ", Time)
         TimeArrival[NumInQ] = Time
         
     else:
@@ -93,8 +93,7 @@ def Arrive():
         TimeNextEvent[2] = Time + funExpon(1/MeanService)
     
 def Depart():
-    global NumInQ, TotalOfDelays,NumCustsDelayed, ServerStatus, TimeNextEvent, Time, TimeArrival, NumInSys
-    NumInSys -= 1 
+    global NumInQ, TotalOfDelays,NumCustsDelayed, ServerStatus, TimeNextEvent, Time, TimeArrival
     if (NumInQ == 0):
         ServerStatus = IDLE
         TimeNextEvent[2] = 10**30
@@ -137,8 +136,8 @@ def ExecuteSimulation():
 
 if __name__ == '__main__':
     global MeanInterarrival, MeanService, NumDelaysRequired
-    MeanInterarrival = 9 #tiempo medio de llegada **lambda
-    MeanService = 10 #tiempo medio de servicio **MU
+    MeanInterarrival = 5.9 #tiempo medio de llegada **lambda
+    MeanService = 6 #tiempo medio de servicio **MU
     NumDelaysRequired = 10000 #número total de clientes cuyas demoras serán observadas
 
     '''print("Mean Interarrival")
@@ -154,27 +153,23 @@ if __name__ == '__main__':
     promedio_clientes_en_cola = (MeanInterarrival**2)/(MeanService*(MeanService-MeanInterarrival))
     promedio_demora_en_cola = MeanInterarrival/(MeanService*(MeanService-MeanInterarrival))
     promedio_utilizacion_servidor = MeanInterarrival/MeanService
-    promedio_clientes_en_sistema = NumDelaysRequired/3
 
     print(promedio_clientes_en_cola, "  ",promedio_demora_en_cola, "  ", promedio_utilizacion_servidor)
 
     clientes_en_cola = []
     demora_en_cola = []
     utilizacion_servidor = []
-    clientes_en_sistema = []
 
-    n = 50
+    n = 250
     for i in range(n):
         rta = ExecuteSimulation()
         clientes_en_cola.append(rta[0])
         demora_en_cola.append(rta[1])
         utilizacion_servidor.append(rta[2])
-        clientes_en_sistema.append(rta[3])
 
     lista_clientes_en_cola = []
     lista_demora_en_cola = []
     lista_utilizacion_servidor = []
-    lista_clientes_en_sistema = []
 
     for i in range(n):
         clientes_en_cola_i = statistics.mean(clientes_en_cola[:i+1])
@@ -183,8 +178,6 @@ if __name__ == '__main__':
         lista_demora_en_cola.append([i,demora_promedio_i])
         utilizacion_servidor_i = statistics.mean(utilizacion_servidor[:i+1])
         lista_utilizacion_servidor.append([i,utilizacion_servidor_i])
-        clientes_en_sistema_i = statistics.mean(clientes_en_sistema[:i+1])
-        lista_clientes_en_sistema.append([i,clientes_en_sistema_i])
 
     plt.title('Número promedio de clientes en cola') 
     x1, y1 = zip(*[m for m in lista_clientes_en_cola])
@@ -206,11 +199,3 @@ if __name__ == '__main__':
     plt.plot([promedio_utilizacion_servidor for i in range(n)], linestyle='dashed', color='blue')
     plt.grid(True)
     plt.show()
-
-    x, y = zip(*[m for m in lista_clientes_en_sistema])
-    plt.title('Promedio de clientes en el sistema') 
-    plt.plot(x, y, markersize=1, lw=1,color='g')
-    #plt.plot([promedio_clientes_en_sistema for i in range(n)], linestyle='dashed', color='blue')
-    plt.grid(True)
-    plt.show()
-
